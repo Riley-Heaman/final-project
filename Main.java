@@ -7,6 +7,7 @@
 import java.util.HashMap;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -221,7 +222,8 @@ public class Main {
     static int getAge(LocalDate birth){
         //calculate and report the age and if it is their birthday today.
         LocalDate today = LocalDate.now();
-        int age = today.getYear() - birth.getYear();
+        Period age = Period.between(birth, today);
+
         System.out.println("\nToday is: " + today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)));
         System.out.println("You were born on: " + birth.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)));
 
@@ -229,15 +231,8 @@ public class Main {
         if ((today.getDayOfMonth() == birth.getDayOfMonth()) && (today.getMonth() == birth.getMonth())){
             System.out.println("Today is your birthday! Happy Birthday :)");
         }
-        //if your birthday hasn't passed yet this year.
-        if ((today.getDayOfMonth() < birth.getDayOfMonth()) && (today.getMonthValue() == birth.getMonthValue())){
-            System.out.println("That makes you " + (age-1) + " years old.");
-            return age-1;
-        }
-        else{
-            System.out.println("That makes you " + age + " years old.");
-            return age;
-        }
+        System.out.println("That makes you " + age.getYears() + " years old.");
+         return age.getYears();
     }
 
     static LocalDate getBirthDay(Scanner input){
