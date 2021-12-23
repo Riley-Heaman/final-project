@@ -58,7 +58,8 @@ public class Main {
                     "That's the Gemini experience in a nutshell.\n" + "Spontaneous, playful, and adorably erratic, Gemini is driven by its insatiable curiosity.\n" +
                     "Appropriately symbolized by the celestial twins, this air sign was interested in so many pursuits that it had to double itself.\n" +
                     "You know, NBD!");
-        message.put("Cancer", "Represented by the crab, Cancer seamlessly weaves between the sea and shore representing Cancer\'s ability to exist in both emotional and material realms.\n" +
+        message.put("Cancer", "Represented by the crab,\n" +
+                    "Cancer seamlessly weaves between the sea and shore representing Cancer\'s ability to exist in both emotional and material realms.\n" +
                     "Cancers are highly intuitive and their psychic abilities manifest in tangible spaces.\n" +
                     "But—just like the hard-shelled crustaceans—this water sign is willing to do whatever it takes to protect itself emotionally.\n" +
                     "In order to get to know this sign, you're going to need to establish trust!");
@@ -244,93 +245,74 @@ public class Main {
         System.out.println("Please enter your birthday and I'll tell you what your horoscope sign is & who they tend to be.\n" +
                            "(mm/dd/yyyy) or (mm-dd-yyyy)");
         String dateOfBirth;
-        Boolean correct = false;
         input.useDelimiter(System.lineSeparator());
         LocalDate birthday = null;
-        while(correct != true){
-            dateOfBirth = input.next();
+        dateOfBirth = input.next();
 
-            //Make sure input is the correct length
-            if (dateOfBirth.length() == 10){
-                //If both characters between numbers are not the same and aren't ('/' | '-') re-promt and try again.
-                if ((dateOfBirth.charAt(2) != '/' && dateOfBirth.charAt(2) != '-') 
-                 && (dateOfBirth.charAt(5) != '/' && dateOfBirth.charAt(5) != '-')){
-                    System.out.println("Please use the format (mm/dd/yyyy) or (mm-dd-yyyy):");
-                }
+        //Make sure input is the correct length
+        if (dateOfBirth.length() == 10){
+                
+            //If both characters between numbers are the same and ('/' | '-') then it is correct.
+            if ((dateOfBirth.charAt(2) == '/' && dateOfBirth.charAt(5) == '/') 
+             || (dateOfBirth.charAt(2) == '-' && dateOfBirth.charAt(5) == '-')){
 
-                //If both characters between numbers are the same and ('/' | '-') then it is correct.
-                else if ((dateOfBirth.charAt(2) == '/' && dateOfBirth.charAt(5) == '/') 
-                      || (dateOfBirth.charAt(2) == '-' && dateOfBirth.charAt(5) == '-')){
-
-                    //convert the year section into an int of the same value
-                    int year = ((Character.getNumericValue(dateOfBirth.charAt(6)) * 1000) +
-                                (Character.getNumericValue(dateOfBirth.charAt(7)) * 100) +
-                                (Character.getNumericValue(dateOfBirth.charAt(8)) * 10) +
-                                 Character.getNumericValue(dateOfBirth.charAt(9)));
-                    //convert the string of the "month" to int then to the data type Month
-                    Month month;
-                    //if the first digit is 0 start here.
-                    if (dateOfBirth.charAt(0) == '0'){
-                        int monthNum = (Character.getNumericValue(dateOfBirth.charAt(1)));
-                        try{
-                            //Check if the month is correct.
-                            month = Month.of(monthNum);
-                            //convert the day section into an int of the same value
-                            int dayOfMonth = ((Character.getNumericValue(dateOfBirth.charAt(3)) * 10) +
-                                               Character.getNumericValue(dateOfBirth.charAt(4)));
-                            
-                            //update the LocalDate "birthday" to reflect the input. Only works for a real date.
-                            try{
-                                birthday = LocalDate.of(year, month, dayOfMonth);
-                                correct = true;
-                            }
-
-                            //date is incorrect
-                            catch(Exception e){
-                                System.out.println("Please use a valid date.");
-                            }
-                            finally{}}
-                        //incorrect month    
-                        catch(Exception e){
-                            System.out.println("Please use a valid date.");
-                        }
+                //convert the year section into an int of the same value
+                int year = ((Character.getNumericValue(dateOfBirth.charAt(6)) * 1000) +
+                            (Character.getNumericValue(dateOfBirth.charAt(7)) * 100) +
+                            (Character.getNumericValue(dateOfBirth.charAt(8)) * 10) +
+                             Character.getNumericValue(dateOfBirth.charAt(9)));
+                try{
+                    Boolean yearChk = null;
+                    if (year < 2022 && year > 1910){
+                        yearChk = true;
                     }
-                    else{
-                        //start here if the month is ( Oct | Nov | Dec )
-                        int monthNum = ((Character.getNumericValue(dateOfBirth.charAt(0)) * 10) +
-                                         Character.getNumericValue(dateOfBirth.charAt(1)));
-                        try{
-                            //make sure month is correct
-                            month = Month.of(monthNum);
-                            //convert the day section into an int of the same value
-                            int dayOfMonth = ((Character.getNumericValue(dateOfBirth.charAt(3)) * 10) +
-                                               Character.getNumericValue(dateOfBirth.charAt(4)));
-                            
-                            //update the LocalDate "birthday" to reflect the input. Only works for a real date.
-                            try{
-                                birthday = LocalDate.of(year, month, dayOfMonth);
-                                correct = true;
-                            }
-                            //We found an error in the date.
-                            catch(Exception e){
-                                System.out.println("Please use a valid date.");
-                            }
-                            finally {}}
-                        //The month is incorrect
-                        catch(Exception e){
-                            System.out.println("Please use a valid date.");
-                        } 
-                    }     
+                    yearChk.equals(true);
                 }
-                //Error catch for: mismatched '/' or '-'
+                catch(Exception e){
+                    System.out.println("Please use a valid date.\n");
+                    return null;
+                }
+                //convert the string of the "month" to int then to the data type Month
+                Month month;
+                int monthNum;
+                //if the first digit is 0 start here.
+                if (dateOfBirth.charAt(0) == '0'){
+                    monthNum = (Character.getNumericValue(dateOfBirth.charAt(1)));
+                }
                 else{
-                    System.out.println("Please use the format (mm/dd/yyyy) or (mm-dd-yyyy):");
+                    monthNum = ((Character.getNumericValue(dateOfBirth.charAt(0)) * 10) +
+                                 Character.getNumericValue(dateOfBirth.charAt(1)));
+                }
+                try{
+                    //Check if the month is correct.
+                    month = Month.of(monthNum);
+                    //convert the day section into an int of the same value
+                    int dayOfMonth = ((Character.getNumericValue(dateOfBirth.charAt(3)) * 10) +
+                                       Character.getNumericValue(dateOfBirth.charAt(4)));
+                            
+                    //update the LocalDate "birthday" to reflect the input. Only works for a real date.
+                    try{
+                        birthday = LocalDate.of(year, month, dayOfMonth);
+                    }
+
+                    //date is incorrect
+                    catch(Exception e){
+                        System.out.println("Please use a valid date.\n");
+                    }
+                    finally{}}
+                //incorrect month    
+                catch(Exception e){
+                    System.out.println("Please use a valid date.\n");
                 }
             }
-            //Error catch for: incorrect length
+            //Error catch for: mismatched '/' or '-'
             else{
-                System.out.println("Please use the format (mm/dd/yyyy) or (mm-dd-yyyy):");
+                System.out.println("Please use the format (mm/dd/yyyy) or (mm-dd-yyyy)\n");
             }
+        }
+        //Error catch for: incorrect length
+        else{
+            System.out.println("Please use the format (mm/dd/yyyy) or (mm-dd-yyyy)\n");
         }
         return birthday; 
     }
